@@ -1,0 +1,207 @@
+<TeXmacs|1.0.7.16>
+
+<style|<tuple|generic|std-list>>
+
+<\body>
+  <doc-data|<doc-title|CSCI 2300 HW #3>|<doc-author-data|<author-name|Joshua
+  M. Zone>>>
+
+  Question 1 (6.4):
+
+  <\enumerate-alpha>
+    <item>The Subproblems: define an array of subproblems S(i) for
+    <math|0\<leqslant\> i \<leqslant\> n> Where S(i) is 1 if s[1..i] is a
+    sequence of words. Otherwise it will be 0.\ 
+
+    Algorithm: initialize S(0) = 1 and update the values S(i) in ascending
+    order. Recursion is below:
+
+    <\equation*>
+      S<around*|(|i|)>= max<around*|(|0\<leqslant\>j\<less\>i|)>
+      <around*|{|S<around*|(|j|)>: dict<around*|(|s<around*|[|j+1\<ldots\>i|]>|)>
+      is true|}>
+    </equation*>
+
+    Then the string s can be reconstructed as a sequence of valid words if
+    and only if S(n) = 1.
+
+    If S[1...i] is a sequence of valid words then there is a last word
+    S[j...i] that is valid and where S(j) = 1 which will cause S(i) to be set
+    to 1. Otherwise, for any valid word S[j...i], S(j) must be 0 and S(i)
+    will also be set to 0. Runs in \ <math|O<around*|(|n<above|<above||2>|>|)>
+    >since there are n subproblems that are solvable in
+    <math|O<around*|(|n|)>> time using the previous subproblem.
+
+    <item>When S(i) is updated, keep track of the previous item, S(j) which
+    caused the update of S(i), since S[j+1..i] was a valid word. When the
+    program ends, if S(n) = 1, then to recover the partition in words, trace
+    the series of updates. This runs in constant time to each subproblem
+    which is O(n) time to pass over the full array. So the runtime remains
+    <math|O<around*|(|n<above||><above|<above|<above||2>|>|>|)>>.
+  </enumerate-alpha>
+
+  \;
+
+  Question 2 (6.15):
+
+  Define the subproblems A(i, j) for <math|1 \<leqslant\> i ,j \<leqslant\>
+  n> to represent the probability that A is te first to win n games, given
+  that after <math|i +j> games, A has won i.\ 
+
+  \;
+
+  Initialize A by setting <math|A<around*|(|n,j|)> = 1> for <math|j != n> and
+  <math|A<around*|(|i,n|)> = 0> for all i. Other subproblems can be solved
+  incrementally in decreasing order of <math|i+j> using the recursion:
+
+  <\equation*>
+    A<around*|(|i,j|)> = <frac|1|2><around*|(|A<around*|(|i,j+1|)>
+    +A<around*|(|i+1,j|)>|)>
+  </equation*>
+
+  Using the recursion we can compute A(i, j) by conditioning on the outcome
+  of the (i + j + 1)th game therefore we know that the recursion is correct.
+  These outcomes take place with the probability of <math|<frac|1|2>>. If A
+  wins, then the probability of A winning the game is A(i + 1, j) also if B
+  wins, then A has a probability of A(i, j+1) of winning. To find the
+  solutions of all the subproblems we would have to solve
+  <math|O<around*|(|n<rsup|2>|)> <above||>>subproblems that would each take
+  O(1) time to solve which leaves a total runtime of
+  <math|O<around*|(|n<rsup|2>|)>.> If we only want to know A(i,j) subproblem
+  then stop once <math|O<around*|(|<around*|(|n-<around*|(|i+j|)>|)><rsup|2>|)>>
+  subproblems.
+
+  \;
+
+  Question 3 (6.17):
+
+  Define D(v) as a predicate which evaluates to true if it can make change
+  for <with|font-shape|italic|v> using the available denominations
+  <math|x<rsub|1>\<nocomma\>,x<rsub|2>,\<ldots\>,x<rsub|n>>. If it is
+  possible to make change for v using given denominations, then it is
+  possible to make change for <math|v - x<rsub|i>> using the same
+  denomiations with one coin of <math|x<rsub|i>> being chosen. Since we don't
+  know which <with|font-shape|italic|i> will finally give us true value we
+  will do a <with|font-shape|italic|logical or> over all
+  <with|font-shape|italic|i>.\ 
+
+  <\equation*>
+    D<around*|(|v|)> = V<rsub|1\<leqslant\>i\<leqslant\>n><around*|{|<frac|D<around*|(|v-x<rsub|i>|)>
+    if x<rsub|i> \<leqslant\> v|false otherwise>|\<nobracket\>>
+  </equation*>
+
+  <\cpp-code>
+    precedure make-change(<math|x<rsub|1>,\<ldots\>x<rsub|n>,V>)
+
+    Input: Denominations of available coins
+    <math|x<rsub|1>,\<ldots\>,x<rsub|n>,Value V for which we are seeking
+    denominations>
+
+    Output: true if making change with available denomination is feasible
+
+    \ \ \ \ \ \ false otherwise
+
+    Declare an array D of size <math|V+1>
+
+    D[0] = true
+
+    for i = 1 to V
+
+    \ \ \ D[i] = false
+
+    for v = 1 to V:
+
+    \ \ \ for j = 1 to n:
+
+    \ \ \ \ \ \ if <math|x<rsub|j>\<leqslant\>v:>
+
+    \ \ \ \ \ \ \ \ \ D[v] <math|\<vee\>> D[<math|v-x<rsub|j>>]
+
+    \ \ \ \ \ \ else:
+
+    \ \ \ \ \ \ \ \ \ D[<with|font-shape|italic|v>] = false
+
+    return D[<with|font-shape|italic|V>]
+  </cpp-code>
+
+  Complexity: <math|O<around*|(|<around*|\||n|\|><around*|\||V|\|>|)>>
+
+  \;
+
+  Question 4 (WordWrap):
+
+  <\cpp-code>
+    Print-Neatly(M,n,l)
+
+    for i := (n...1)
+
+    do length := l<math|<rsub|i>>
+
+    \ \ \ j := i
+
+    \ \ \ OPT[i] := <math|\<infty\>>
+
+    \ \ \ last[i]
+
+    \;
+
+    \ \ \ while length \<less\>= M
+
+    \ \ \ do if j =\ 
+
+    \ \ \ \ \ \ then OPT[i] := 0
+
+    \ \ \ \ \ \ \ \ \ last[i] := n
+
+    \ \ \ \ \ \ \ \ \ exit while
+
+    \;
+
+    \ \ \ \ \ \ else cost := OPT[j] + (M - length)<math|<rsup|2>>
+
+    \ \ \ \ \ \ \ \ \ if cost \<less\> OPT[i]
+
+    \ \ \ \ \ \ \ \ \ \ \ \ then OPT[i] := cost
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ last[i] := l
+
+    \;
+
+    \ \ \ \ \ \ \ \ \ j := j + 1
+
+    \ \ \ \ \ \ \ \ \ length := length + l<math|<rsub|j>> + 1
+
+    \;
+
+    i := 1
+
+    while i \<less\> n
+
+    do Print words i through next[i]
+
+    \ \ \ Print new line
+
+    \ \ \ i := next[i] + 1
+  </cpp-code>
+
+  The outerloop will perform <with|font-shape|italic|n> iterations, and the
+  inner loop will perform at most <math|<frac|M|2>> with an overall time
+  complexity of <math|O<around*|(|nM|)>.> The <with|font-shape|italic|OPT>
+  and <with|font-shape|italic|next> arrays both have n elements, therefore
+  they require <with|font-shape|italic|O(n)> space.\ 
+</body>
+
+<\initial>
+  <\collection>
+    <associate|language|american>
+    <associate|page-type|letter>
+  </collection>
+</initial>
+
+<\references>
+  <\collection>
+    <associate|auto-1|<tuple|1|?>>
+    <associate|auto-2|<tuple|2|?>>
+    <associate|auto-3|<tuple|3|?>>
+  </collection>
+</references>

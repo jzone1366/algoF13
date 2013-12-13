@@ -1,0 +1,34 @@
+11/25
+
+Euler vs Rudrata
+
+Euler path problem: given graph G, find a path that traverses all edges exactly once.
+
+Rudrata Path problem: given 8x8 chessboard and a knight, can the knight traverse the board and visit each square exactly once?
+
+Rudrata cycle problem: we want to find a cycle that visits each vertex exactly once; or report that no such cycle exists. 
+Rudrata Path Problem: we want to find a path from vertex s to vertex t that traverses all vertices exactly once. 
+
+Rudrata Path Problem ---> Rudrata Cycle Problem
+reduction will map instance I = (G, s, t) into an instance f(I) = (G' = (V', E'))
+
+f(): G' is simply G with on additional vertex x and two additional edges {s,x} and {x,t} 
+
+V' = V U {x}	E' = E U { {s,x}, {x,t} }
+
+if there's a Rudrata Cycle, the Rudrata Cycle should then find it (or report there is none) 
+
+if there is a cycle, function h() would delete edges {s,x} and {x,t} from the cycle
+
+3SAT ---> Independent Set 
+
+In 3SAT problem, we're given as input some boolean expression -- i.e. set of clauses, each with three or fewer literals/variables:
+
+(-x v y v -z) (x v -y v z) (x v y v z) (-x v -y)
+
+
+Given six cities, labeled A-F
+encoding: 	ADEBCF
+			FADBCE
+crossover:	ADEBCE -> doesn't visit F
+			FADBCF -> doesn't visit E

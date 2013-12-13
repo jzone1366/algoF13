@@ -1,0 +1,78 @@
+Exam 1
+Question 1
+
+procedure euler(G)
+{
+	foreach vertex u in v
+	{
+		if in-degree(u) != out-degree(u),
+			then display FALSE and exit
+	}
+	start at an arbitrary vertex u
+	while unvisited edges exist in G
+	{
+		display vertex u
+		select edge e from vertex u such that removing e would not disconnect the graph G
+
+		traverse edge e and remove it (mark it as visited)
+
+		let u be the current vertex (traversed via e)
+	}
+}
+
+	O(V + E^2)
+
+Question 2
+a.	Determine all sink vertices in graph G (Where out-degree is 0)
+	if only one sink vertex exists in G, 
+		display YES
+
+	else displt NO
+
+b.	Determin all sink vertices in graph G (Where out-degree is 0)
+
+	if only one sink vertex exists in G, 
+		display that vertex
+
+c. O(V) to iterate through all vertices
+
+	foreach vertex u in V:
+		traverse the adjacency list for u
+
+	O(V) or O(V+E)		Linear
+
+
+Question 3
+a.	T(n) = 6T(n/2) + O(n^2)
+	Master theorem with a = 6, b = 2, d = 2
+
+b.	T(2n) = 2T(n/4) + O(n^3)
+	Master theorem with a = 2, b = 4, d = 3
+
+c.	T(n) = 4 T(n-1) + O(n)
+	cannot use master theorem
+
+	T(2) = 4 T(1) + O(n)
+	T(3) = 4 T(2) + O(n) = 4 (4 T(1) + O(n)) + O(n)
+	T(4) = 4 T(3) + O(n) = 4 (4 (4 T(1) + O(n)) + O(n))
+	T(n) = O(4^n)
+
+Question 4
+a.	big-theta(g)	both are O(n^2)
+b.	big-Omega(g)	3^n grows no faster than n^2
+c.	big-theta(g)	both are O(log n)
+d.	big-Omega(g)	n! grows faster than 2^n
+
+Question 5
+b.	procedure find_cycles(G)
+	{
+		foreach edge e in E:
+			mark e as green
+
+		perform DFS; when a back edge is detected, mark the backedge as red
+	}
+
+c. O(V + E)
+
+extra credit:
+cocoa puffs

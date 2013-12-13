@@ -1,0 +1,34 @@
+procedure dfs (G)
+{
+	cc_count = 1;
+	define ccnum[]
+
+	for each v in V:				//mark all vertices as not visited
+		visited[v] = false;
+
+	for each v in V:
+		if not visited[v]:
+		{
+			explore(G,v)
+			cc_count++;
+		}
+		//cc_count is number of connected components (cc)
+}
+
+procedure explore(G, v)
+{
+	input: graph G = (V, E); starting vertex v in V
+
+	output: visited[u] is set to true for each u reachable from v
+					ccnum[u] is ser to the current cc_count for each u reachable from v
+
+	previsit(v) ---------------> ccnum[v] == cc_count
+
+	visited[v] = true
+
+	for each edge (v,u) in E:
+		if not visited[u]:
+			explore(G, u)
+
+	postvisit(v) --------------> nop
+}

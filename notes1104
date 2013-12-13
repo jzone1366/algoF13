@@ -1,0 +1,158 @@
+11/04
+Barnes and Noble - The Old Man and the Sea, Green bag.
+
+Dynamic Programming
+To Solve a given problem, we define a collection of subproblems.
+
+{L(J): 1 <= k <= m}
+
+with the following KEY property that allows them to be solved in a SINGLE PASS:
+	There's a specific ordering on the subproblems, and a relation that shows how to solve a subproblem based on the answers to the "smaller" (upstream) subproblems.
+		--i.e. subproblems that appear earlier in the ordering. 
+
+Why does recursion work so well with divide-and-conquer but not well at all with dynamic programming?
+
+In divide-and-conquer, we divide a problem often into subproblems that are substantially smaller (typically half the size)
+
+e.g. mergesort sorts an array of size n by recursively sorting two subarrays of size n/2
+
+key here is the sharp drop in problem size.
+(The full recursion tree has lograithmic depth and a polynomial number of nodes)
+
+In dynamic programming, a problem is reduced to subproblems that tend to be only slightly smaller
+
+Therefore, the full recursion tree generally has polynomial deth and an exponential numbers of Nodes.  YIKES :(
+
+it turns out that most of these nodes (subproblems) are repeats (e.g. fibonacci example); and there are relatively few distinct subproblems among them to solve
+
+Efficiency is therefore obtained by figuring out the single-pass ordering of hte distinct subproblems. 
+
+EDIT DISTANCE
+	jrkki => hello	(example using mobile phone)
+
+EDIT DISTANCE is a measure between two strings that is the cost of their best alignment
+i.e. minimum number of "edits" to transform one string into another, where the edits include: insertion, deletion, substitution (of individual characters).
+
+e.g. SNOWY and SUNNY
+	- S N O W - Y 		Edit distance of 5 (because there are 5 edits made)
+	S U N - - N Y
+insert S
+Substitute S-->U
+delete O, and W
+insert N
+
+A better edit distance
+S U N N - Y 		Edit distance of 3
+S - N O W Y
+delete U
+substitute O-->N
+delete W 
+
+<side-problem>
+	J R K K I 		How does mobile phone spell check work?
+	H E L L O
+</side-problem>
+
+Brute force approach would look at all the possible ways to align the two strings.......very inefficient
+
+Use dynamic programming to tackle this problem....
+	KEY: What are the subproblems? (These must be solvable in a specific single-pass order)
+
+	PROBLEM (restated): Find the edit distance between two strings x[1..m] and y[1..n]
+
+	SUBPROBLEM should go part of the way to solving the whole problem
+	.......so let's use substrings....string prefixes.
+
+x:	S N O W 	Y
+	^^^^^^^
+y:	S U N 		N Y
+	^^^^^
+
+Subproblem E(i,j) is edit distance between 
+	prefix x[1..i] and prefix y[1..j]
+
+	with i <= m and j <= n
+
+Find E(m,n) then we've solved the given problem. 
+
+RIGHTMOST columns of alignment between x[1..i] annd y[1..j] is
+	x[i]			-			x[i]
+			or 			  or 
+	 -			   y[j]			y[j]
+   ^^^^^		  ^^^^^^	   ^^^^^^
+   case 1 		  case 2	   case 3
+
+case 1: cost is 1 (delete x[i]) and 
+	we next need to align x[1..(i-1)] and y y[1..j]
+	====> E(i-1, j)
+
+case 2: cost is 1 (insert y[j]) and
+	we next need to align x[1..i] and y[1..(j-1)]
+	====> E(i, j-1)
+
+case 3: cost is 0 (if x[i] == y[j]) or cost is 1 (if x[i] != y[j]) and
+	we next need to align x[1..(i-1)] and y[1..(j-1)]
+	====> E(i-1, j-1)
+
+so E(i,j) = min{ 1 + E(i-1,j),   1 + E(i,j-1),   diff(i,j) + E(i-1,j-1) }
+					
+					 /
+				 	|0 if x[i] == y[j] 
+where diff(i,j) =	|	   or 
+				  	|1 if x[i] != y[j]
+				  	 \
+
+x: S N O W		Y
+
+y: S U N 		N Y
+
+E(4,3) = min{1 + E(3,3), 1 + E(4,2), diff(4,3) + E(3,2) }
+	   = min{1 + E(3,3), 1 + E(4,2),      1    + E(3,2) }
+
+approach: fill in 2-dimensional table with all of these E(i.j) values
+
+order matters: fill in top row (left to right) down to bottom row or fill in left column (top to bottom) across to right column.
+	i===> 1 2 3 4 5
+		. S N O W Y
+j	.	0 1 2 3 4 5
+1	S 	1 0 
+2	U 	2
+3	N 	3
+4	N 	4
+5	Y 	5         ?<------- E(m,n) = E(5,5)
+
+so E(i,j) = min{ 1 + E(i-1,j),   1 + E(i,j-1),   diff(i,j) + E(i-1,j-1) }
+
+procedure find_minimum_edit_distance(x, y, m, n)
+{
+	for i in [0..m]:	//O(m)
+		E(i,0) = i
+	for j in [0..n]:	//O(n)
+		E(0,j) = j
+	for i in [1..m]:	//O(mn)
+		for j in [1..n]:
+			E(i,j) = min{ 1 + E(i-1,j),   1 + E(i,j-1),   diff(i,j) + E(i-1,j-1) }
+	return E(m,n)
+}                        2
+consider this as being (O ), where n is the length of the longer of the two strings.
+
+EXPONENTIAL
+				(figure 6.4 in Dasgupta)
+POLYNOMIAL 
+
+E X P O N E N T I A L
+- - P O L Y N O M I A L
+
+
+Every dynamic programming solution has an underlying DAG structure:
+-- Think of each node as a subproblem
+-- Think of each edge as a precedence constraint on the order in which the subproblems must be tackled
+in the graph (see Figure 6.5 Dasgupta)
+-- all edge lengths/weights are set to 1, except the dashed-lined edges are set to 0 (because they require no edit)
+-- moving DOWN represents a deletion.
+-- moving DIAGONALLY represents a substitution (or a no-op)
+-- moving RIGHT represents an insertion. 
+
+shortest path from s=(0,0) to t=(m,n)
+
+also check out problem 6.11 in Dasgupta (longest common subsequence)

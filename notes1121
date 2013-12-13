@@ -1,0 +1,112 @@
+11/21
+ProLog - logic programming language
+	(see more in Prog Lang)
+
+Prolog is a goal-driven programming language
+Prolog is a declarative language
+
+Apply Known rules to facts to INFER new information
+	(also answer queries about the information)
+
+INFERENCE ENGINE
+
+male (George)
+female (Mary)
+smart (George)
+smart (Mary)
+parent (Mary, George)
+
+child(George, Mary)
+
+for all X (woman(X) ==> human(X))
+for all Y (mother(X, Y) ==> child(Y, X))
+there exists Z (smarter(Z, 'Dr.G'))
+
+standarize propositions (simplify) using Horn Formulas
+
+in Horn Formulas, we represent knowledge about variables by using three kinds of clauses: implications, singletons, pure negative clauses 
+
+--implications:
+LHS is a series of ANDed positive literals
+RHS is a single positive literal
+
+A_1 AND A_2 AND ... AND A_m ==> B_1
+
+if all LHS conditions hold, then the RHS literal must be true
+
+--singleton: an implication with no LHS
+
+	==> x
+	==> parent(Mary, George)
+
+-- pure negative clause -- any number of negated literals all ORed together
+
+	(-x v -y V -z)
+
+Is there a satisfying assignment of truth values?
+
+e.g. GIVEN seven clauses below:
+
+	==> x
+	(w ^ y ^ z) ==> x
+	(x ^ z) ==> w
+	x ==> y
+	(x ^ y) ==> w
+	(-z)
+	(-w v -x v -y)
+
+greedy algorithm:
+-- assign TRUE values stingily and only if absolutely necessary to have the implication to be true, because otherwise an implication 	would be violated. 
+ALGORITHM:
+-- we assign literals to be false
+-- While there exists an implication that is not satisfied, set the RHS (right hand side) (consequent) of implicaiton to TRUE
+-- if all pure negative clauses are also satisfied, then we've found a set of truth assignemtns that hold.
+=======================================================================================================================================
+
+3sat -- i.e. clauses have 3 literals.
+
+Problems that can be solved in polynomial time are called TRACTABLE problems
+Problems that can not be solved in polynomial time are called INTRACTABLE problems
+
+class P
+--formal definition includes in P only DECISION PROBLEMS
+	(i.e. problems with yes/no answers)
+
+	instead of asking about the minimum number of colors needed to color vertices of a graph such thta no two adjacent vertices have the same color, we instead ask whether there exists such a coloring with no more than m colors, with m = 1,2,3, 
+	...(the m-coloring problem)
+
+	first value of m in this series for which the decision problem has a solution solves the (original) optimization version of the problem. ....
+
+	class P (polynomial) is the class of decision problems that can be solved in plynomial time by some (deterministic) algorithm(s)
+
+	if a decision problem cannot be solved, it is undeciable in a finite time. 
+
+class NP
+-- no polynomial-time algorithm has been found, nor has the impossibility of such an algorithm been proved. 
+
+a nondeterministic algorithm is a 2-stage procedure that takes as input an instance I of a decision problem and does the following:
+	(1) nondeterministic (guessing) stage: an arbitrary solution S is generated that serves as a candidate solution to given instance I
+	(2) deterministic (verification) stage: a deterministic algorithm takes I and S as its input, and outputs YES if S is a solution to I;
+
+	if S is not a solution to I, algorithm outputs NO or does not halt at all.
+
+nondeterministic algorithm solves a decision problem iff for every YES instance of the problem, it returns YES on some execution -- i.e. the nondeterministic algorithm must be capable of guessing a solution at least once and be able to verify its validity
+
+nondeterministic algorithm is said to be nondeterministic polynomial if the time efficiency of verification is polynomial.
+class NP (nondterministic polynomial) is the class of decision problems that can be solved by nondeterministic polynomial algorithms. 
+
+class NP-Complete
+-- contains problems in NP that are as difficult as any other problem in NP, because a polynomial-time REDUCTION (transformation) exists to reduce (transform) one problem (and solution) into another
+
+-- a REDUCTION is a transformation algorithm f() that transforms any instance I of search problem A to an instance J = f(I) of search 	problem B
+	we need another polynomial-time algorithm h() that maps solution S of J back to I = h(S)
+
+	f() is a polynomial-time algorithm
+
+Independent set problem:
+
+	Given undirected graph G = (V, E)
+
+	a subset of vertices S is an INDEPENDENT SET of G if there are no edges between them
+
+	the problem: Given G, identify/output independent set S of maximum size (optimazation problem)

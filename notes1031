@@ -1,0 +1,111 @@
+10/31
+
+DYNAMIC PROGRAMMING
+Given graph (Figure 6.1)
+
+dist(D) = min {dist(B) + w(B,D), dist(C) + w(C,D) }
+
+Algorithm to compute all distances:
+
+initialize all dist() values to infinity
+dist(S) = 0
+add all vertices V-S to set L
+topologically sort L <=== O(v+E)
+
+foreach v in L (in linearized order):
+	foreach edge (u,v) in E:
+		dist(v) = min(dist(u) + w(u,v) )
+
+At each vertex, we compute some function based on one or more predecessor values (in this case, traversing the topologically sorted graph)
+
+-------------------------------------------------------------------------------------------------------------------------------------
+Dynamic Programming:
+-- A problem is solved by identifying subproblems (same problem) and solving them one by one, smallest first, using the answers to the smaller problems to combine together and calculate larger solutions, until the problem is solved. 
+
+-- In dynamic programming, a DAG is implicit
+-- The vertices of the DAG are the subproblems that we define
+-- the edges of the DAG are the dependencies between subproblems
+	-- i.e to solve subproblem B, we first need to answer subproblem A (Therefore, there's an esge from A to B)
+
+=======================================================================================================================================
+overlapping subproblems add overhead
+
+function fib(n):
+	if n == 0 then return 0	//base case
+	else if n == 1 then return 1 //base case
+	else return fib(n - 1) + fib (n - 2)
+
+					OVERLAPPING SUB PROBLEMS ---->  Expontential Runtime :(
+
+
+instead, keep track of intermediate solutions to subproblems (via a lookup array or map)
+
+F = new map (associative structure)
+F[0] = 0
+F[1] = 1
+
+//top down approach
+function fib(n):
+	if F does not contain key n:
+		F[n] = fib(n - 1) + fib(n - 2)
+	return F[n]
+
+we're storing intermediate values to later use to prune the recursion tree
+-- caching
+--memo-ization
+
+
+//bottom-up approach
+write an algorithm that is "bottom up" and calculates fib(n) in O(n) with O(1) space
+
+function fib(n):
+	v1 = 0;
+	v2 = 1;
+	for i in (1, n - 1):
+		v3 = v1 + v2;
+		v1 = v2;
+		v2 = v3;
+	return v2
+
+==================================================================================================
+Longest increasing subsequence
+-- given a sequence of numbers a1, a2, ... an
+-- a subsequnce is any subset of these numbers in order from left to right, but not necessarily consecutive
+-- increasing subsequence is a subsequence in which the numbers are increasing
+
+GOAL:	fine the longest increasing subsequence
+
+5	2	8	6	3 6	9	7
+
+Represent the above as a graph G=(V,E) that contains all the valid transitions from a smaller number to a larger number in sequence order.
+
+Vertex i for each a_i:
+	edge (i,j) exists whenever a_i and a_j can be consecutive values in an increasing sub sequence i < j and a_i < a_j
+
+Given the graph representation (it's a DAG!), we need an algorithm to find a longest path
+
+for j in (1,n):
+	L(j) = 1 + max(L(i): (i,j) in E)
+
+return max L(j)
+
+L(j) is the length of the longest path (i.e longest increasing subsequence) ending at j (plus 1 since we're counting vertices rather than edges)
+
+Any path j must pass through a predecessor, so L(j) is 1 plus the max L9j) value of its predecessors
+
+-- if no predecessors (no edges into j), then we use 0
+
+in dynamic programming, there is some ORDERING to the subproblems and a RELATION that shows how to solve a subproblem given the answers to predecessor (smaller) subproblems (subproblems appear earlier in the ordering)
+
+GOAL: find shortest "reliable" path, which means fine shortest path from S to T that uses no more than k edges
+
+for each vertex v and each integer i <= k,
+	define dist(v,j) to be the length of the shortest path from S to v that traverse exactly i edges
+
+	the starting values dist(v, 0) are infinity for all vertices expect for s, which is 0
+
+	update or RELAX:
+		dist(v,i) = min 			{ dist(u, i-1) + w(u,v)}
+						  (u,v) in E
+
+	

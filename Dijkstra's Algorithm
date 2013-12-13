@@ -1,0 +1,32 @@
+Dijkstra's Algorithm
+
+Dijkstra's algorithm always attempts to select the "closest" vertex in V-S to add to set S,
+	
+	Where S is the set of vertives for which the algorithm has determined the shortest paths for (from starting vertex s)
+
+	Therfore, it's a "greedy" algorithm
+
+//given graphe G with weights on edges defined by w 
+//determine shortest paths to all vertices from start vertex s (including unreachable ones)
+
+procedure Dijkstra(G, w, s)
+{
+	INIT-SINGLE-SOURCE(G, s)
+
+	S = <empty-set>
+
+	//use priority queue with dist d as the key
+	Q = G.v		i.e insert all vertices into QUEUE
+
+	while Q not empty
+	{
+		u = EXTRACT-MIN(Q)	(de-queue operation)
+		add u to set S
+
+		foreach vertex v that's adjacent to u
+		{
+			RELAX(u, v, w)
+			Reorder Q based on adjuested dist v.d
+		}
+	}
+}

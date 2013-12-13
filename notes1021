@@ -1,0 +1,86 @@
+10/21
+Better approach -> "Union by Rank"
+--store disjoin sets as directed trees
+--each vertex has a rank (height of subtree beneath it)
+--each vertex has a parent (pi) pointer
+--representative of each set is root of the tree (which contains a "parent" edge/loop to itself)
+
+makeset(x):
+	pi(x) = x
+	rank(x) = 0
+
+find(x): //find representative of element x
+	while x != pi(x):
+		x = pi(x)
+	return x
+
+union(x,y):
+	rx = find(x)
+	ry = find(y)
+
+	if rx == ry: return 	//they are already in one set.
+
+	if rank(rx) > rank(ry):
+		pi(ry) = rx
+	else:
+		pi(rx) = ry
+		if rank(rx) = rank(ry):
+			rank(ry) += 1;
+
+modified find(x):
+	if x != pi(x):
+		pi(x) = find(pi(x))
+	return pi(x)
+
+a CUT (S, V-S) is a partition of vertices of a given graph G = (V, E) into two distinct groups: S and V-S, where S is a set of vertices (i.e. a subset of V)
+
+edge (u,v) in E "crosses" a cut (S, V-S) if one of its endpoints is in S and the other is in V-S
+
+suppose edges in set X are part of MST of G
+
+pick any subset of nodes S for which X does not cross between S and V-S
+
+let e be the minimu-weight edge to cross cut, then X U {e} is part of some MST
+
+(i.e.) we can add edge e to MST
+
+X = {} (edges picked so far)
+
+repeat until |X| = |V| - 1
+	{
+		pick a set S in V for which S has no edges leaving S (i.e. no edges between S and V-S)
+
+		let e in E be the minimum-weight edge between S and V-S (i.e. crossing the cut)
+
+		X = X U {e}
+	}
+
+PRIM'S Algorithm for finding MST
+
+procedure Prim-MST(G, w)
+{
+	foreach u in v
+	{
+		cost(u) = infinity
+		pi(u) = null
+	}
+
+	pick any initial vertex s
+	cost (s) = 0
+
+	PQ = makequeue(V) //PQ order is weight of the minimum-weight outgoing edge from set S
+
+	while PG is not empty
+	{
+		v = deletemin(PQ)
+		foreach (v,z) in E
+		{
+			if cost(z) > w(v,z)
+			{
+				cost(z) = w(v,z)
+				pi(z) = v
+				decreaseket(PQ, z)
+			}
+		}
+	}
+}

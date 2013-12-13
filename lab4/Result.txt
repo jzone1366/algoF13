@@ -1,0 +1,6 @@
+There are 4 clusters
+Size of each clusters: 
+1: 1
+2: 1
+7: 2
+9: 6

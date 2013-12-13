@@ -1,0 +1,84 @@
+10/24
+Euler Tour
+definition: an euler tour of a connected directed graph G = (V, E) is a cycle that traerses each edge of graph G exactly once (Though vertices may be visited more than once.)
+
+Show that G has an Euler tour iff foreach vertex v in-degree(v) == out-degree(v)
+
+a SIMPLE CYCLE visits each vertex no more than once
+
+a COMPLEX CYCLE may visit a vertex more than once
+
+For each vertex in a simple cycle, we have the in-degree and out-degree both equal to 1, if we only consider the traversed edges. 
+
+A complex cycle can be expressed as the union of two or more simple cycles.
+
+Any vertex in a complex cycle has in-degree equal to its out-degree
+
+If a graph does have an Euler tour, then all of its vertices have equal in- and out-degrees.
+
+another idea for proving this.....use proof of contradiction.
+
+(start with: assume C be the longest complex cycle in G)
+
+Huffman Encoding:
+David Huffman, 1952:
+	"A Method for the Construction of Minimum Redundancy Codes"
+-- is a form of data compression
+-- utilizes statistical data about the text to be transmitted/compressed
+--not all characters (bytes) occur ina message witht he same frequency. 
+
+
+
+e.g.
+	"meet me for beer please"
+
+	a 	1 	==	1000
+	b 	1 	==	1001
+	e 	7 	==	00
+	f 	1 	==	1010
+	l 	1 	==	1011
+	m 	2 	==	0110
+	o 	1 	==	1100
+	p 	1 	==	1101
+	r 	2 	==	0111
+	s 	1 	==	1110
+	t 	1 	==	1111
+  SPACE 4 	==	010
+
+-- create a binary tree
+---- create nodes within this tree with each character and its frequency
+
+-- place nodes into a priority queue
+---- the lower the frequency/occurence, the higher the priority in the queue
+
+Algorithm:
+	while priority queue contains at least 2 nodes
+	{
+		create new node N
+		dequeue node and make it the left subtree of new node N
+
+		dequeue node and make it the right subtree of N
+
+		frequency of N is the sum of frequencies of left and right nodes. 
+
+		enqueue N back into the priority queue
+	}
+algorithm is 0(n log n)
+
+Set Cover:
+INPUT:	a set of elements B
+	sets s  ,  s  ,  ... , s       subsets of B
+		  1     2           m
+		  							(likely these will overlap)
+
+OUTPUT: a selection of the subsets whose union is B.
+
+COST (to be minimized): number of sets selected
+
+Greedy Algorithm:
+repeat until all elements of B are selected
+	.....or.....
+repeat until union of all selected subsets is B
+{
+	select the subset s_i containing the most uncovered elements/points
+}

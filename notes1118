@@ -1,0 +1,66 @@
+11/18
+
+NP-Complete
+
+example problems:
+(1) SINGLE-SOURCE LONGEST PATH PROBLEM:
+	Given directed graph G = (V,E), find the Longest path from vertex S (in V) to akk other vertices in V, We can assume each edge has weight 1. And we require that the path be "simple" -- i.e contains no repeated vertices. 
+
+(2)	HAMILTONIAN CYCLE PROBLEM:
+	Give directed graph G = (V,E), find a simple cycle that contains all vertices of V. Remember that a simple cycle is a cycle that does NOT visit any vertex more than once. 
+
+(3)	TRAVELING SALESMAN PROBLEM (TSP)
+	Given a fully connected undirected graph F = (V,E) with n vertices and therefore (n)(n-1)/2 edges between each pair of vertices, find a cycle that visits each vertex exactly once at minimum overall total cost. 
+	brute force or exhaustive search would be to try all possible "tours"; but there are (n-1)! possible tours. 
+
+For the above problems (and many others), refine the algorithms to be in polynomial time, if possible......
+
+ Use heuristics to find near-optimal solutions
+
+If we have a way to modify the given problem such that it becomes verifiable in polynomial time, that's a setp in the right direction. 
+==================================================================
+
+Most algorithms thus far are polynomial-time algorithms
+-- for inputs of size n, worst-case (average-case) runtimes have been O(n^k) for some constant k
+
+beyond this, there are many unsolvable (intractable) problems. 
+-- e.g. Turing's Halting Problem (does a program terminate or does it run forever?)
+
+Given a program and some input to that program, will it go into an infinite loop. 
+
+a problem is DECIDABLE if it has a solution AND is guaranteed to run in finite time; otherwise undecidable. 
+
+=========================================================================
+ 
+Many problems are solvable in exponential (or factorial) time
+
+THREE classes of probelms/algorithms:
+(1)	class P
+	--	There is an algorithm that takes as input an instance I (i.e. of the problem to be solved) with a runtime polynomial in |I|
+	--	O(n^k) with constant K >= 0
+	--	if I has a solution, algorithm returns suce a solution or (otherwise) reports no such solution exists
+	--Solvable in polynomial time
+
+(2)	class NP (nondterministic polynomial)
+	--	for algorithms in class NP, there is an efficient checking algorithm C that takes as input a given instance I (i.e. of the problem to be solved) AND a proposed solution S
+	--	C outputs true iff S is a valid solution to I and the runtime of C(I,S) is polynomial in |I|
+	--	VERIFIABLE in polynomial time (i.e. given a potential solution)
+	-- P is a subset of NP
+(3) class NPC (NP complete)
+
+TSP "take two"
+-- modify TSP to no longer be an optimization problem, because I can not verify a solution to be optimal in polynomial time.
+
+	Given a fully connected undirected graph F = (V,E) with n vertices and therefore (n)(n-1)/2 edges between each pair of vertices, find a cycle that visits each vertex exactly once at minimum overall total cost that does not exceeed maximum budgeted cost B.  
+
+=========================================================================
+class P (easy)							Class NP-complete (hard)
+Shortest path 							longest path
+minimum spanning tree 					traveling salesman problem
+2SAT									3SAT
+Euler path 								Rudrata Path
+Independent Set (on trees)				Independent Set
+
+
+2SAT:
+	Given a logical expression with 2 literals (x and y), can we find a set of truth values for x and y that satisfies the given logical expression? or report that none exists. 
